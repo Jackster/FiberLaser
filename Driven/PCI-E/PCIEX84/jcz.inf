@@ -1,0 +1,111 @@
+;; JCZLMC.INF - INF to install PCIE Laser Marking Devic
+;; Copyright (c) 2004, JinChengZi Corporation,LTD
+;; 北京金橙子科技有限公司
+;; Use Add New Hardware (other devices) from the Control Panel
+
+[Version]
+Signature="$WINDOWS NT$"
+Class="BJJCZ Controller"
+ClassGUID={F9F78A7F-FF58-42a7-88F7-B75AB33F34C7}
+Provider=%BJJCZ%
+DriverVer=09/28/2015,5.1.0.3
+CatalogFile=LMCE20151014.cat
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=Class_AddReg
+
+[Class_AddReg]
+HKR,,,,%DeviceClassName%
+HKR,,Icon,,"-5"
+
+[DestinationDirs]
+DefaultDestDir = 12
+;DefaultDestDir=11
+;Lmc1.copy=10,System32\Drivers
+
+; ================= Device section =====================
+
+[Manufacturer]
+%BJJCZ%=BJJCZ,NTx86
+
+; For Win2K
+[BJJCZ]
+%LMDEV_1%=InstallLMC1,PCI\VEN_9588&DEV_9960
+
+; For XP and later
+[BJJCZ.NTx86]
+%LMDEV_1%=InstallLMC1,PCI\VEN_9588&DEV_9960
+
+[InstallLMC1.NT]
+DriverVer=09/28/2015,5.1.0.3
+CopyFiles=Lmc1.copy
+AddReg=Lmc1_NT_registry
+
+[InstallLMC1.NT.Services]
+AddService=LMC1,2,Lmc1.Service
+
+[InstallLMC1.NTx86]
+DriverVer=09/28/2015,5.1.0.3
+CopyFiles=Lmc1.copy
+AddReg=Lmc1_NT_registry
+
+[InstallLMC1.NTx86.Services]
+AddService=LMC1,2,Lmc1.Service
+
+[Lmc1.Service]
+DisplayName=%LmcDesc%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%10%\system32\drivers\lmce.sys
+LoadOrderGroup = Base
+
+[Lmc1_NT_registry]
+HKLM, "System\CurrentControlSet\Services\LMC1\Parameters",\
+	"BreakOnEntry", 0x00010001, 0
+
+[Lmc1.copy]
+lmce.sys,,,2
+
+[ControlFlags]
+
+[SourceDisksNames]
+1=%InstallDisk%,,,
+
+[SourceDisksFiles]
+lmce.sys=1
+
+;-------------- WDF Coinstaller installation
+[DestinationDirs]
+CoInstaller_CopyFiles = 11
+
+[InstallLMC1.NT.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[CoInstaller_CopyFiles]
+WdfCoInstaller01009.dll
+
+[SourceDisksFiles]
+WdfCoInstaller01009.dll=1 ; make sure the number matches with SourceDisksNames
+
+[CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller01009.dll,WdfCoInstaller"
+
+[InstallLMC1.NT.Wdf]
+KmdfService = Lmce, Lmce_wdfsect
+
+[Lmce_wdfsect]
+KmdfLibraryVersion = 1.9
+
+;---------------------------------------------------------------;
+
+[Strings]
+BJJCZ = "BeiJing JCZ Co.,Ltd "
+DeviceClassName="BJJCZ Device"
+LMDEV_1  = "BJJCZ PCIE Laser Mark Control Board"
+DEVICON   ="System\CurrentControlSet\Services\Class\Laser Device"
+InstallDisk = "BJJCZ Laser Device Install" 
+LmcDesc="LMCPCIE  Service"

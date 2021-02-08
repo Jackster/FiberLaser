@@ -1,0 +1,12 @@
+[RINGPARAM]
+m_dRingDiameter=1.130000e+001
+m_dRingHeight=8.000000e+000
+m_dRingL=1.000000e+000
+m_dRingAngle=0.000000e+000
+m_dStdRingDiameter=1.800000e+001
+m_dStdRingHeight=8.000000e+000
+m_dStdRingL=5.000000e+001
+m_dStdRingAngle=0.000000e+000
+m_dBaseHeight=2.000000e+002
+m_dFocusLength=1.000000e+002
+
